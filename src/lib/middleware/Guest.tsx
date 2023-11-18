@@ -1,12 +1,36 @@
 import { auth } from "../config/firebase";
 import { Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { User } from "firebase/auth";
+import { useLoading } from "../../hooks/LoadingContext";
 
 export default function GuestOnly({ children }: { children: any }) {
   const userState = auth.currentUser;
-  if (!userState) {
-    console.log(userState);
-    return <>{children}</>;
+  const loadingCtx = useLoading();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    loadingCtx.setLoading(true);
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+      loadingCtx.setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  if (loadingCtx.loading) {
+    return (
+      <>
+        <div className="min-h-screen flex justify-center items-center">
+          <span className="loading loading-spinner loading-lg"></span>
+        </div>
+      </>
+    );
   }
 
-  return <Navigate to={"/home"}></Navigate>;
+  if (userState) {
+    return <Navigate to={"/"}></Navigate>;
+  }
+
+  return <>{children}</>;
 }
