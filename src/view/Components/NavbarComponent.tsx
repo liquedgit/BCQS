@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../lib/config/firebase";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const nav = useNavigate();
@@ -19,9 +20,11 @@ export default function Navbar() {
                   <li>
                     <a>Link 1</a>
                   </li>
-                  <li>
-                    <a>Link 2</a>
-                  </li>
+                  <Link to={"queue"}>
+                    <li>
+                      <a>Link 2</a>
+                    </li>
+                  </Link>
                 </ul>
               </details>
             </li>
