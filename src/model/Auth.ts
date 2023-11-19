@@ -6,12 +6,16 @@ import { USER_ROLE } from "../lib/config/constant";
 const userCollection = collection(db, "users");
 
 export interface UserDBO{
-
+    role : string
 }
 
 export const GetUserRole = async(uid : string)=>{
     const userData = await getDoc(doc(userCollection, uid))
-    return userData
+    console.log(userData)
+    const data : UserDBO = {
+        role: userData.data()?.role
+    };
+    return data    
 }
 
 export async function AuthLogin(email : string, password : string){
@@ -28,16 +32,21 @@ export async function AuthLogin(email : string, password : string){
 export async function AuthRegister(email : string, password : string){
     try{
         const newUser = await createUserWithEmailAndPassword(auth, email,password);
-        console.log(newUser);
-        
+            
         await setDoc(doc(userCollection, newUser.user.uid), {
             role: USER_ROLE  
         });
         await signOut(auth)
         return newUser
-    }catch(e){
-        console.log(e);
-        
+    }catch(e){        
         return null;
+    }
+}
+
+export async function AuthSignOut(){
+    try{
+        await auth.signOut();
+    }catch(e){
+        console.error(e)
     }
 }

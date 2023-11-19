@@ -29,7 +29,7 @@ export default function GuestOnly({ children }: { children: any }) {
   }
 
   if (userState) {
-    return <Navigate to={"/"}></Navigate>;
+    return <Navigate to={"/"} replace></Navigate>;
   }
 
   return <>{children}</>;
