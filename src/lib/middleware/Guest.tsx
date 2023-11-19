@@ -18,6 +18,8 @@ export default function GuestOnly({ children }: { children: any }) {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {}, [loadingCtx.loading]);
+
   if (loadingCtx.loading) {
     return (
       <>

@@ -10,26 +10,21 @@ export default function UserOnly({ children }: { children: any }) {
   const [role, setRole] = useState("");
   const loadingContext = useLoading();
   const [user, setUser] = useState<User | null>(null);
+  const [authState, setAuthState] = useState(false);
 
   useEffect(() => {
     loadingContext.setLoading(true);
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
-      if (!currentUser) {
-        loadingContext.setLoading(false);
-      }
+      setAuthState(true);
     });
 
     return unsubscribe;
   }, []);
 
   useEffect(() => {
-    const fetchUserRole = async () => {
-      console.log(user);
-
-      if (user) {
-        console.log(user);
-
+    if (user && authState) {
+      const fetchUserRole = async () => {
         try {
           const userRole = await GetUserRole(user.uid);
           console.log(userRole);
@@ -38,11 +33,10 @@ export default function UserOnly({ children }: { children: any }) {
           console.error("Error fetching user role:", error);
         }
         loadingContext.setLoading(false);
-      }
-    };
-
-    fetchUserRole();
-  }, [user]);
+      };
+      fetchUserRole();
+    }
+  }, [user, authState]);
 
   useEffect(() => {}, [loadingContext]);
 
@@ -56,9 +50,9 @@ export default function UserOnly({ children }: { children: any }) {
     );
   }
 
-  if (user != null && role == USER_ROLE) {
-    return <>{children}</>;
+  if (user == null && role != USER_ROLE && authState) {
+    return <Navigate to={"/login"} replace></Navigate>;
   }
 
-  return <Navigate to={"/login"} replace></Navigate>;
+  return <>{children}</>;
 }
