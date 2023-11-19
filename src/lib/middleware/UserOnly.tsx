@@ -14,8 +14,10 @@ export default function UserOnly({ children }: { children: any }) {
 
   useEffect(() => {
     loadingContext.setLoading(true);
+    setAuthState(false);
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
+      loadingContext.setLoading(false);
       setAuthState(true);
     });
 
@@ -24,6 +26,7 @@ export default function UserOnly({ children }: { children: any }) {
 
   useEffect(() => {
     if (user && authState) {
+      loadingContext.setLoading(true);
       const fetchUserRole = async () => {
         try {
           const userRole = await GetUserRole(user.uid);
@@ -38,7 +41,7 @@ export default function UserOnly({ children }: { children: any }) {
     }
   }, [user, authState]);
 
-  useEffect(() => {}, [loadingContext]);
+  useEffect(() => {}, [loadingContext, authState]);
 
   if (loadingContext.loading) {
     return (
@@ -49,7 +52,6 @@ export default function UserOnly({ children }: { children: any }) {
       </>
     );
   }
-
   if (user == null && role != USER_ROLE && authState) {
     return <Navigate to={"/login"} replace></Navigate>;
   }

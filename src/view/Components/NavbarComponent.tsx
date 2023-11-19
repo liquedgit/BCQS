@@ -1,15 +1,17 @@
+import { useNavigate } from "react-router-dom";
+import { auth } from "../../lib/config/firebase";
+
 export default function Navbar() {
+  const nav = useNavigate();
+
   return (
     <>
-      <div className="navbar bg-base-100">
+      <div className="navbar bg-base-100 sticky">
         <div className="flex-1">
-          <a className="btn btn-ghost text-xl">daisyUI</a>
+          <a className="btn btn-ghost text-xl">Welcome, sadasd</a>
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
-            <li>
-              <a>Link</a>
-            </li>
             <li>
               <details>
                 <summary>Parent</summary>
@@ -22,6 +24,14 @@ export default function Navbar() {
                   </li>
                 </ul>
               </details>
+            </li>
+            <li
+              onClick={async () => {
+                await auth.signOut();
+                nav("/login");
+              }}
+            >
+              <a>Logout</a>
             </li>
           </ul>
         </div>
