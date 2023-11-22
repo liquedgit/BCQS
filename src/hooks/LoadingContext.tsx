@@ -6,12 +6,12 @@ export interface LoadingContextInterface {
 }
 
 const loadingContext = createContext<LoadingContextInterface>({
-  loading: false,
+  loading: true,
   setLoading: () => {},
 });
 
 export default function LoadingProvider({ children }: { children: any }) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const val = { loading, setLoading };
   return (

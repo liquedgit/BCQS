@@ -6,7 +6,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingProvider from "./hooks/LoadingContext";
 import UserOnly from "./lib/middleware/UserOnly";
-import HomePage from "./view/CustomerHomePage";
+import AuthProvider from "./hooks/AuthContext";
+import HomePage from "./view/HomePage";
+import AuthenticatedOnly from "./lib/middleware/AuthenticatedOnly";
+import TenantDetailsPage from "./view/TenantDetailPage";
 
 function App() {
   const Guest = () => {
@@ -25,19 +28,42 @@ function App() {
     );
   };
 
+  const Authenticated = () => {
+    return (
+      <AuthenticatedOnly>
+        <Outlet />
+      </AuthenticatedOnly>
+    );
+  };
+
+  const Tenant = () => {
+    return (
+      <>
+        <Outlet />
+      </>
+    );
+  };
+
   return (
     <>
       <LoadingProvider>
-        <ToastContainer />
-        <Routes>
-          <Route element={<Guest />}>
-            <Route path={"/login"} element={<LoginPage />} />
-            <Route path={"/register"} element={<RegisterPage />} />
-          </Route>
-          <Route element={<User />}>
-            <Route path={"/"} element={<HomePage />} />
-          </Route>
-        </Routes>
+        <AuthProvider>
+          <ToastContainer />
+          <Routes>
+            <Route element={<Authenticated />}>
+              <Route path={"/"} element={<HomePage />} />
+              <Route element={<User />}>
+                <Route path="/tenant/:id" element={<TenantDetailsPage />} />
+                <Route path="/queue" />
+              </Route>
+              <Route element={<Tenant />}></Route>
+            </Route>
+            <Route element={<Guest />}>
+              <Route path={"/login"} element={<LoginPage />} />
+              <Route path={"/register"} element={<RegisterPage />} />
+            </Route>
+          </Routes>
+        </AuthProvider>
       </LoadingProvider>
     </>
   );
