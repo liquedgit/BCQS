@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingProvider from "./hooks/LoadingContext";
 import UserOnly from "./lib/middleware/UserOnly";
-import HomePage from "./view/HomePage";
+import HomePage from "./view/CustomerHomePage";
 
 function App() {
   const Guest = () => {
