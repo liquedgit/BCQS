@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AuthLoginController } from "../controller/AuthController";
 import { toastError, toastSuccess } from "../lib/config/toast";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -52,6 +53,8 @@ export default function LoginPage() {
               <a href="#" className="label-text-alt link link-hover">
                 Forgot password?
               </a>
+              <Link to="/register" className="label-text-alt link link-hover">Sign Up</Link>
+
             </label>
           </div>
           <div className="form-control mt-6">

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AuthRegisterController } from "../controller/AuthController";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -60,6 +61,8 @@ export default function RegisterPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
+            <Link to="/login" className="label-text-alt link link-hover">Login</Link>
+
 
             <div className="form-control mt-6">
               <button className="btn btn-primary">Register</button>
