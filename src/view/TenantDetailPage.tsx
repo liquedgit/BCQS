@@ -1,12 +1,17 @@
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import Navbar from "./Components/NavbarComponent";
 import { useState, useEffect } from "react";
 import { GetAllProductFromTenants, Product } from "../model/Product";
 import ProductCard from "./Components/ProductCard";
+import { toastError, toastSuccess } from "../lib/config/toast";
+import { CreateQueueController } from "../controller/QueueController";
+import { useAuth } from "../hooks/AuthContext";
 
 export default function TenantDetailsPage() {
   const { id } = useParams();
-  const [products, setProducts] = useState<Product[] | null>(null);
+  const [products, setProducts] = useState<Product[] | null>([]);
+  const { user } = useAuth();
+  const nav = useNavigate();
 
   const [quantities, setQuantities] = useState<{ [productId: string]: number }>(
     {}
@@ -43,7 +48,20 @@ export default function TenantDetailsPage() {
       }
     };
     GetProducts();
-  }, []);
+  }, [id]);
+
+  const checkoutBtnOnClick = async () => {
+    const res = await CreateQueueController(id!, user!.uid, quantities);
+    if (res) {
+      toastSuccess("Successfully queued your order...");
+      nav("/queue", { replace: true });
+    }
+  };
+
+  if (!id || products == null) {
+    toastError("Invalid tenant id");
+    return <Navigate to={"/"} replace />;
+  }
 
   return (
     <>
@@ -53,7 +71,12 @@ export default function TenantDetailsPage() {
           <h1 className="text-2xl font-semibold">Product List</h1>
           <div className="ml-auto flex items-center justify-between">
             <h2 className="text-xl mr-6">Total Price : Rp. {totalPrice}</h2>
-            <button className="btn btn-error text-white">Checkout</button>
+            <button
+              onClick={checkoutBtnOnClick}
+              className="btn btn-error text-white"
+            >
+              Checkout
+            </button>
           </div>
         </div>
         <div className="grid s:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-10 py-6">

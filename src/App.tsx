@@ -10,6 +10,7 @@ import AuthProvider from "./hooks/AuthContext";
 import HomePage from "./view/HomePage";
 import AuthenticatedOnly from "./lib/middleware/AuthenticatedOnly";
 import TenantDetailsPage from "./view/TenantDetailPage";
+import QueuePage from "./view/QueuePage";
 
 function App() {
   const Guest = () => {
@@ -54,7 +55,7 @@ function App() {
               <Route path={"/"} element={<HomePage />} />
               <Route element={<User />}>
                 <Route path="/tenant/:id" element={<TenantDetailsPage />} />
-                <Route path="/queue" />
+                <Route path="/queue" element={<QueuePage />} />
               </Route>
               <Route element={<Tenant />}></Route>
             </Route>

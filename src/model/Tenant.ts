@@ -1,4 +1,4 @@
-import { DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, getDocs, orderBy, query } from "firebase/firestore";
+import { DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../lib/config/firebase";
 
 export class Tenant{
@@ -30,4 +30,10 @@ export async function GetAllTenants(){
     const q = query(collection(db, "tenants"), orderBy("name"))
     const documents = await getDocs(q.withConverter(TenantConverter))
     return documents.docs.map(doc=>doc.data())
+}
+
+export async function GetTenantById(tenantId : string){
+    const document =  await getDoc(doc(db, "tenants", tenantId).withConverter(TenantConverter))
+
+    return document.data()
 }
