@@ -3,6 +3,7 @@ import Navbar from "./Components/NavbarComponent";
 import { GetTenantsQueueRealtime, GetUserQueueRealtime, Queue } from "../model/Queue";
 import { useAuth } from "../hooks/AuthContext";
 import UserQueueComponent from "./Components/UserQueueComponent";
+import TenantQueueComponent from "./Components/TenantQueueComponent";
 
 
 interface ComponentProps {
@@ -29,13 +30,27 @@ export default function QueuePage({ isTenant }: ComponentProps) {
       <div className="p-10">
         <h1 className="text-2xl font-semibold">Queue List</h1>
         <div className="flex flex-col gap-4 w-full justify-center p-10">
+
+
           {queue &&
             queue.length > 0 &&
+            !isTenant &&
             queue.map((q, i) => {
               return (
                 <UserQueueComponent key={q.id} queue={q} i={i + 1} />
               );
             })}
+
+          {queue &&
+            queue.length > 0 &&
+            isTenant &&
+            queue.map((q, i) => {
+              return (
+                <TenantQueueComponent key={q.id} queue={q} i={i + 1} />
+              );
+            })}
+
+
         </div>
       </div>
     </>

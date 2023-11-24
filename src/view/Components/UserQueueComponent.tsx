@@ -30,32 +30,27 @@ export default function UserQueueComponent({
       <div className="collapse collapse-plus bg-base-200">
         <input type="radio" name="my-accordion-3" />
         <div className="collapse-title text-xl font-medium">
-          <div className="flex">
-            <h2 className="gap-10">{tenant?.name}
+          <div className="flex items-center">
+            <h2 className="flex items-center gap-2">
+              {tenant?.name}
               {queue.status == STATUS_FINISHED &&
                 <span
-                  className="badge badge-success ml-3"
+                  className="badge badge-success"
                 >Finished</span>
               }
               {queue.status == STATUS_PENDING &&
                 <span
-                  className="badge badge-warning ml-3"
+                  className="badge badge-warning"
                 >Pending</span>
               }
 
             </h2>
-
-
-
             <p className="ml-auto">Queue #{i}</p>
           </div>
         </div>
         <div className="collapse-content">
-          {queue.productQty.map((item) => {
-            return (
-              <div>
-                <p>{item.product.name} [{item.qty}x] </p>
-              </div>)
+          {queue.productQty.map((item, j) => {
+            return <p key={j}>{item.product.name} [{item.qty}x] </p>
           })}
         </div>
       </div>
