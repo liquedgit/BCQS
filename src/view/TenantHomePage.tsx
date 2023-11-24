@@ -21,7 +21,7 @@ export default function TenantHomePage() {
         GetProducts();
     }, []);
 
-    const addProductHandler = () => {
+    const showAddProductModal = () => {
         //Todo add product
 
     }
@@ -58,19 +58,10 @@ export default function TenantHomePage() {
                                 />
                             );
                         })}
-                    {products?.length == 0 && (
-                        <>
-                            <div className="flex justify-center items-center">
-                                <h1 className="text-xl font-medium">
-                                    There is nothing here...
-                                </h1>
-                            </div>
-                        </>
-                    )}
                     <div
-                        className="card card-compact w-full bg-neutral shadow-xl hover:scale-sm text-white shadow-2xl cursor-pointer min-h-20 transition duration-300 ease-in-out"
+                        className="card card-compact btn bg-neutral select-none h-96 shadow-xl min-h-full hover:scale-sm text-white shadow-2xl cursor-pointer transition duration-300 ease-in-out "
                         id="addproduct"
-                        onClick={addProductHandler}
+                        onClick={showAddProductModal}
                     >
                         <div className="card-body items-center justify-center">
                             <FaPlus className="text-6xl" />
