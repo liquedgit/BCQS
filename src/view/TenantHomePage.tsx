@@ -1,8 +1,8 @@
-import { FaArrowRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaArrowRight, FaPlus } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { useAuth } from "../hooks/AuthContext";
 import { GetAllProductFromTenants, Product } from "../model/Product";
+import { HashLink as Link } from "react-router-hash-link";
 import ProductCard from "./Components/ProductCard";
 
 export default function TenantHomePage() {
@@ -21,6 +21,11 @@ export default function TenantHomePage() {
         GetProducts();
     }, []);
 
+    const addProductHandler = () => {
+        //Todo add product
+
+    }
+
 
     return (
         <>
@@ -29,7 +34,7 @@ export default function TenantHomePage() {
                     <h1 className="text-2xl font-semibold text-white">
                         Start Addding Your Products
                     </h1>
-                    <Link to={"/products"}>
+                    <Link to={"#addproduct"} smooth>
                         <div className="p-4 rounded-xl">
                             <FaArrowRight className="text-white w-7 h-7" />
                         </div>
@@ -49,7 +54,7 @@ export default function TenantHomePage() {
                                     key={product.id}
                                     product={product}
                                     updateQuantity={() => { }}
-                                    viewOnly={true}
+                                    tenant={true}
                                 />
                             );
                         })}
@@ -62,6 +67,15 @@ export default function TenantHomePage() {
                             </div>
                         </>
                     )}
+                    <div
+                        className="card card-compact w-full bg-neutral shadow-xl hover:text-white shadow-2xl cursor-pointer min-h-20"
+                        id="addproduct"
+                        onClick={addProductHandler}
+                    >
+                        <div className="card-body items-center justify-center">
+                            <FaPlus className="text-6xl" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

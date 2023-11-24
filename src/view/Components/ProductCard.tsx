@@ -6,7 +6,7 @@ import defaultImage from "../../assets/Tenant1.jpg";
 interface ComponentProps {
   product: Product;
   updateQuantity: (id: string, qty: number) => void;
-  viewOnly?: boolean; // Add this line
+  tenant?: boolean; // Add this line
 }
 
 
@@ -14,7 +14,7 @@ interface ComponentProps {
 export default function ({
   product,
   updateQuantity,
-  viewOnly
+  tenant
 }: ComponentProps) {
   const [qty, setQty] = useState(0);
 
@@ -44,7 +44,7 @@ export default function ({
         <div className="card-body">
           <h2 className="card-title text-xl">{product.name}</h2>
           <h2 className="text-lg">Rp. {product.price}</h2>
-          {!!!viewOnly && <>
+          {!!!tenant && <>
             <div className="flex justify-center">
 
               <button onClick={minusOnClick} className="btn btn-error">
