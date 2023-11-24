@@ -13,16 +13,19 @@ export async function AuthRegisterController(email : string, password : string, 
     if(email == "" && password == "" && confirmPassword == ""){
         toastError("All fields must be filled !");
         return null
+    }else if(email.endsWith("@gmail.com")){
+        toastError("Email must ends with '@gmail.com'");
+        return null;
     }else if(password != confirmPassword){
         toastError("Password and confirm password must be the same !");
-        return null
+        return null;
     }
 
     const userCreds = await AuthRegister(email, password);
     if(userCreds == null){
-        toastError("Error while creating an account !")
+        toastError("Error while creating an account !");
     }else{
-        toastSuccess("Succesfully registered user !")
+        toastSuccess("Succesfully registered user !");
     }
-    return userCreds
+    return userCreds;
 }
