@@ -1,7 +1,7 @@
 import { Queue } from "../../model/Queue";
-import { useEffect, useState } from "react";
-import { GetTenantById, Tenant } from "../../model/Tenant";
 import { STATUS_FINISHED, STATUS_PENDING } from "../../lib/config/constant";
+import { UpdateQueueStatus } from "../../controller/QueueController";
+import { toastError, toastSuccess } from "../../lib/config/toast";
 
 export default function TenantQueueComponent({
     queue,
@@ -11,22 +11,19 @@ export default function TenantQueueComponent({
     i: number;
 }) {
 
-    const [tenant, setTenant] = useState<Tenant>();
+    const finishOrderHandler = async (queueId: string) => {
+        try {
+            const isSuccess = await UpdateQueueStatus(queueId);
 
-    useEffect(() => {
-        const fetchTenantById = async () => {
-            const document = await GetTenantById(queue.tenantId);
-            if (document) {
-                setTenant(document);
+            if (isSuccess) {
+                toastSuccess("Order finished");
+            } else {
+                toastError("Failed to finish order");
             }
-        };
-
-        fetchTenantById();
-    }, []);
-
-    const finishOrderHandler = async () => {
-        //TODO Update queue status to finished
-
+        } catch (error) {
+            console.error("An error occurred:", error);
+            alert("An error occurred while updating the order status.");
+        }
     }
 
 
@@ -47,11 +44,18 @@ export default function TenantQueueComponent({
                             >Pending</span>
                         }
 
-                        <button className="ml-auto btn btn-neutral" onClick={
-                            finishOrderHandler
-                        }>
-                            Finish Order
-                        </button>
+                        {queue.status == STATUS_FINISHED &&
+                            <button className="ml-auto btn btn-neutral btn-disabled">
+                                Finish Order
+                            </button>
+                        }
+
+                        {queue.status == STATUS_PENDING &&
+                            <button className="ml-auto btn btn-neutral " onClick={() => { finishOrderHandler(queue.id) }}>
+                                Finish Order
+                            </button>
+                        }
+
 
                     </div>
                 </div>
@@ -60,7 +64,7 @@ export default function TenantQueueComponent({
                     return <p key={j}>{item.product.name} [{item.qty}x] </p>
                 })}
 
-            </div>
+            </div >
         </>
     );
 }
