@@ -8,12 +8,14 @@ export class Queue{
     createdAt : Date;
     productQty : ProductQty[];
     tenantId : string;
-    constructor(id : string, userid : string,createdAt : Date, productQty : ProductQty[], tenantId :string ){
+    status : string;
+    constructor(id : string, userid : string,createdAt : Date, productQty : ProductQty[], tenantId :string , status : string){
         this.id = id
         this.userid = userid
         this.createdAt = createdAt
         this.productQty = productQty
         this.tenantId = tenantId
+        this.status = status
     }
 }
 
@@ -48,26 +50,25 @@ const ProductQtyConverter = {
 const QueueConverter ={
     toFirestore : (queue : Queue)=>{
         const product = queue.productQty.map((product)=>ProductQtyConverter.toFirestore(product))
-        console.log(product)
         
         return{
             userid: queue.userid,
             createdAt : queue.createdAt,
             tenantId : queue.tenantId,
-            order : product
+            order : product,
+            status : queue.status
         }
     },
     fromFirestore: (snapshot: QueryDocumentSnapshot, options : SnapshotOptions) : Queue=>{
 
         const data = snapshot.data(options);
         const createdAtDate = data.createdAt.toDate();
-        console.log(data)
         const productQtyArray = data.order.map((orderData : any) => {
             const product = new Product(orderData.productId, orderData.name, orderData.imageUrl, orderData.price);
             return new ProductQty(product, orderData.qty);
         });
 
-        return new Queue(snapshot.id, data.userid, createdAtDate, productQtyArray, data.tenantId);
+        return new Queue(snapshot.id, data.userid, createdAtDate, productQtyArray, data.tenantId, data.status);
     }
 }
 
@@ -83,13 +84,22 @@ export function GetUserQueueRealtime(userId : string, callback : (queue: Queue[]
     return unsub
 }
 
-export async function CreateUserQueue(tenantId : string, customerId : string,  qtyProducts : ProductQty[] ){
-    const queue = new Queue("", customerId, new Date(), qtyProducts, tenantId )
+export async function CreateUserQueue(tenantId : string, customerId : string,  qtyProducts : ProductQty[], status = "Pending" ){
+    const queue = new Queue("", customerId, new Date(), qtyProducts, tenantId, status )
     const serializedQueue = QueueConverter.toFirestore(queue)
     await addDoc(collection(db, "queues"),serializedQueue)
     
 }
 
-export async function GetTenantsQueue(tenantId : string){
 
+export async function GetTenantsQueue(tenantId : string, callback : (queue: Queue[])=>void ){
+    const queueRef = collection(db, "queues")
+    const q = query(queueRef, where("tenantId", "==", tenantId), orderBy("createdAt"))
+
+    const unsub = onSnapshot(q.withConverter(QueueConverter), (querySnapshot)=>{
+        const queue = querySnapshot.docs.map(doc=>doc.data())
+        callback(queue)
+    })
+
+    return unsub
 }
