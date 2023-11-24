@@ -92,7 +92,7 @@ export async function CreateUserQueue(tenantId : string, customerId : string,  q
 }
 
 
-export async function GetTenantsQueue(tenantId : string, callback : (queue: Queue[])=>void ){
+export function GetTenantsQueueRealtime(tenantId : string, callback : (queue: Queue[])=>void ){
     const queueRef = collection(db, "queues")
     const q = query(queueRef, where("tenantId", "==", tenantId), orderBy("createdAt"))
 

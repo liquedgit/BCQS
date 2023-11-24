@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
 import Navbar from "./Components/NavbarComponent";
-import { GetUserQueueRealtime, Queue } from "../model/Queue";
+import { GetTenantsQueueRealtime, GetUserQueueRealtime, Queue } from "../model/Queue";
 import { useAuth } from "../hooks/AuthContext";
 import UserQueueComponent from "./Components/UserQueueComponent";
 
-export default function QueuePage() {
+
+interface ComponentProps {
+  isTenant?: Boolean;
+}
+
+export default function QueuePage({ isTenant }: ComponentProps) {
   const [queue, setQueue] = useState<Queue[] | null>([]);
   const { user } = useAuth();
 
   useEffect(() => {
-    const unsubscribe = GetUserQueueRealtime(user!.uid, (newQueue) => {
-      setQueue(newQueue);
-    });
+    const unsubscribe = isTenant ?
+      GetTenantsQueueRealtime(user!.uid, (newQueue) => {
+        setQueue(newQueue);
+      }) : GetUserQueueRealtime(user!.uid, (newQueue) => {
+        setQueue(newQueue);
+      });
     return () => unsubscribe();
   }, []);
 

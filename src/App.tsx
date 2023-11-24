@@ -59,7 +59,7 @@ function App() {
               </Route>
               <Route element={<Tenant />}>
                 <Route path="/products" element={<QueuePage />} />
-                <Route path="/queue-tenant" element={<QueuePage />} />
+                <Route path="/queue-tenant" element={<QueuePage isTenant={true} />} />
               </Route>
             </Route>
             <Route element={<Guest />}>
