@@ -3,13 +3,19 @@ import { Product } from "../../model/Product";
 import { useState, useEffect } from "react";
 import defaultImage from "../../assets/Tenant1.jpg";
 
+interface ComponentProps {
+  product: Product;
+  updateQuantity: (id: string, qty: number) => void;
+  viewOnly?: boolean; // Add this line
+}
+
+
+
 export default function ({
   product,
   updateQuantity,
-}: {
-  product: Product;
-  updateQuantity: (id: string, qty: number) => void;
-}) {
+  viewOnly
+}: ComponentProps) {
   const [qty, setQty] = useState(0);
 
   useEffect(() => {
@@ -38,17 +44,20 @@ export default function ({
         <div className="card-body">
           <h2 className="card-title text-xl">{product.name}</h2>
           <h2 className="text-lg">Rp. {product.price}</h2>
-          <div className="flex justify-center">
-            <button onClick={minusOnClick} className="btn btn-error">
-              <FaMinus />
-            </button>
-            <div className="flex justify-center items-center w-14 font-semibold text-xl">
-              {qty}
+          {!!!viewOnly && <>
+            <div className="flex justify-center">
+
+              <button onClick={minusOnClick} className="btn btn-error">
+                <FaMinus />
+              </button>
+              <div className="flex justify-center items-center w-14 font-semibold text-xl">
+                {qty}
+              </div>
+              <button onClick={plusOnClick} className="btn btn-success">
+                <FaPlus />
+              </button>
             </div>
-            <button onClick={plusOnClick} className="btn btn-success">
-              <FaPlus />
-            </button>
-          </div>
+          </>}
         </div>
       </div>
     </>

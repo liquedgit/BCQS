@@ -49,6 +49,7 @@ export default function TenantHomePage() {
                                     <ProductCard
                                         product={product}
                                         updateQuantity={() => { }}
+                                        viewOnly={true}
                                     />
                                 </>
                             );
