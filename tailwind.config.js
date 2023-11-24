@@ -8,6 +8,9 @@ export default {
       minHeight: {
         20: "20rem",
       },
+      scale: {
+        sm: "1.05",
+      },
     },
   },
   plugins: [daisyui],

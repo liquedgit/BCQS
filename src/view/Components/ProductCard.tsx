@@ -1,4 +1,4 @@
-import { FaMinus, FaPlus } from "react-icons/fa";
+import { FaEdit, FaMinus, FaPlus, FaTrash } from "react-icons/fa";
 import { Product } from "../../model/Product";
 import { useState, useEffect } from "react";
 import defaultImage from "../../assets/Tenant1.jpg";
@@ -32,11 +32,19 @@ export default function ({
     setQty(qty + 1);
   };
 
+  const showDeleteModal = () => {
+    // Delete
+  }
+
+  const showEditModal = () => {
+    // Edits
+  }
+
   return (
     <>
       <div
         key={product.id}
-        className="card card-compact w-full bg-neutral shadow-xl"
+        className="card card-compact w-full bg-neutral shadow-xl hover:scale-sm transition duration-300 ease-in-out"
       >
         <figure>
           <img src={product.imageUrl ? product.imageUrl : defaultImage} />
@@ -55,6 +63,18 @@ export default function ({
               </div>
               <button onClick={plusOnClick} className="btn btn-success">
                 <FaPlus />
+              </button>
+            </div>
+          </>}
+          {tenant && <>
+
+            <div className="flex justify-end gap-2">
+
+              <button onClick={showDeleteModal} className="btn">
+                <FaTrash />
+              </button>
+              <button onClick={showEditModal} className="btn btn-primary">
+                <FaEdit />
               </button>
             </div>
           </>}

@@ -68,7 +68,7 @@ export default function TenantHomePage() {
                         </>
                     )}
                     <div
-                        className="card card-compact w-full bg-neutral shadow-xl hover:text-white shadow-2xl cursor-pointer min-h-20"
+                        className="card card-compact w-full bg-neutral shadow-xl hover:scale-sm text-white shadow-2xl cursor-pointer min-h-20 transition duration-300 ease-in-out"
                         id="addproduct"
                         onClick={addProductHandler}
                     >
