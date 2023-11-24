@@ -4,7 +4,7 @@ import {
   Product,
   UpdateProductFromTenants,
 } from "../../model/Product";
-import { useState, useEffect, useRef, ChangeEvent } from "react";
+import { useState, useEffect, useRef, LegacyRef } from "react";
 import defaultImage from "../../assets/Tenant1.jpg";
 import { useAuth } from "../../hooks/AuthContext";
 import { toastError, toastSuccess } from "../../lib/config/toast";
@@ -41,16 +41,14 @@ export default function ({
     setQty(qty + 1);
   };
 
-  const updateModal = useRef<HTMLDialogElement | undefined>();
-  const deleteModal = useRef<HTMLDialogElement | undefined>();
+  const updateModal: LegacyRef<HTMLDialogElement> | undefined = useRef(null);
+  const deleteModal: LegacyRef<HTMLDialogElement> | undefined = useRef(null);
 
   const [newName, setNewName] = useState("");
   const [newPrice, setNewPrice] = useState(0);
   const [newImage, setNewImage] = useState<any>();
 
   const handleOnUpdate = async () => {
-    console.log(newImage);
-
     let URL = selectedProduct?.imageUrl;
     if (newImage) {
       URL = await UploadImage(newImage);

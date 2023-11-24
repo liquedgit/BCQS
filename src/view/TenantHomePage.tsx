@@ -1,5 +1,5 @@
 import { FaArrowRight, FaPlus } from "react-icons/fa";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, LegacyRef } from "react";
 import { useAuth } from "../hooks/AuthContext";
 import {
   AddProductFromTenants,
@@ -25,7 +25,7 @@ export default function TenantHomePage() {
     GetProducts();
   }, []);
 
-  const createModal = useRef();
+  const createModal: LegacyRef<HTMLDialogElement> | undefined = useRef(null);
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState(0);
   const [productImage, setProductImage] = useState();

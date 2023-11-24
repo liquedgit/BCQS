@@ -4,7 +4,3 @@ export class Transaction{
         this.id = id
     }
 }
-
-export async function CreateTransaction(tenantId : string, totalPrice : string){
-
-}

@@ -20,8 +20,6 @@ export default function UserQueueComponent({
       }
     };
 
-    console.log(queue);
-
     fetchTenantById();
   }, []);
 
@@ -33,24 +31,23 @@ export default function UserQueueComponent({
           <div className="flex items-center">
             <h2 className="flex items-center gap-2">
               {tenant?.name}
-              {queue.status == STATUS_FINISHED &&
-                <span
-                  className="badge badge-success"
-                >Finished</span>
-              }
-              {queue.status == STATUS_PENDING &&
-                <span
-                  className="badge badge-warning"
-                >Pending</span>
-              }
-
+              {queue.status == STATUS_FINISHED && (
+                <span className="badge badge-success">Finished</span>
+              )}
+              {queue.status == STATUS_PENDING && (
+                <span className="badge badge-warning">Pending</span>
+              )}
             </h2>
             <p className="ml-auto">Queue #{i}</p>
           </div>
         </div>
         <div className="collapse-content">
           {queue.productQty.map((item, j) => {
-            return <p key={j}>{item.product.name} [{item.qty}x] </p>
+            return (
+              <p key={j}>
+                {item.product.name} [{item.qty}x]{" "}
+              </p>
+            );
           })}
         </div>
       </div>

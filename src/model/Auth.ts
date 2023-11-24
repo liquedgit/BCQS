@@ -11,7 +11,6 @@ export interface UserDBO{
 
 export const GetUserRole = async(uid : string)=>{
     const userData = await getDoc(doc(userCollection, uid))
-    // console.log(userData)
     const data : UserDBO = {
         role: userData.data()?.role
     };
