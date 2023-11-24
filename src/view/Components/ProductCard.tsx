@@ -50,15 +50,15 @@ export default function ({
           <img src={product.imageUrl ? product.imageUrl : defaultImage} />
         </figure>
         <div className="card-body">
-          <h2 className="card-title text-xl">{product.name}</h2>
-          <h2 className="text-lg">Rp. {product.price}</h2>
+          <h2 className="card-title text-xl text-white">{product.name}</h2>
+          <h2 className="text-lg text-white">IDR {product.price}</h2>
           {!!!tenant && <>
             <div className="flex justify-center">
 
               <button onClick={minusOnClick} className="btn btn-error">
                 <FaMinus />
               </button>
-              <div className="flex justify-center items-center w-14 font-semibold text-xl">
+              <div className="flex justify-center items-center w-14 font-semibold text-xl text">
                 {qty}
               </div>
               <button onClick={plusOnClick} className="btn btn-success">
