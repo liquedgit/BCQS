@@ -45,7 +45,7 @@ export default function ({
         className="card card-compact w-full bg-neutral shadow-xl hover:scale-sm transition duration-300 ease-in-out"
       >
         <figure>
-          <img src={product.imageUrl ? product.imageUrl : defaultImage} />
+          <img src={product.imageUrl ? product.imageUrl : defaultImage} className="w-full" />
         </figure>
         <div className="card-body">
           <h2 className="card-title text-xl text-white">{product.name}</h2>
