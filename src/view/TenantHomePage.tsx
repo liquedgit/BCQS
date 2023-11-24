@@ -9,13 +9,13 @@ export default function TenantHomePage() {
   const [products, setProducts] = useState<Product[] | null>([]);
   const { user } = useAuth();
 
-  useEffect(() => {
-    const GetProducts = async () => {
-      const userId = user?.uid;
-      const products = await GetAllProductFromTenants(userId!);
-      setProducts(products);
-    };
+  const GetProducts = async () => {
+    const userId = user?.uid;
+    const products = await GetAllProductFromTenants(userId!);
+    setProducts(products);
+  };
 
+  useEffect(() => {
     GetProducts();
   }, []);
 
@@ -37,36 +37,40 @@ export default function TenantHomePage() {
           </Link>
         </div>
         <h1 className="text-2xl font-semibold py-6">Your Products</h1>
-
-        <div className="grid s:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-10 py-6">
-          {products &&
-            products.length > 0 &&
-            products.map((product) => {
-              return (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  updateQuantity={() => {}}
-                  tenant={true}
-                />
-              );
-            })}
-          {products?.length == 0 && (
-            <>
-              <div className="flex justify-center items-center">
-                <h1 className="text-xl font-medium">
-                  There is nothing here...
-                </h1>
+        <div className="flex justify-center">
+          <div className="grid s:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 py-6">
+            {products &&
+              products.length > 0 &&
+              products.map((product) => {
+                return (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    updateQuantity={() => {}}
+                    tenant={true}
+                    refetch={GetProducts}
+                  />
+                );
+              })}
+            {products?.length == 0 && (
+              <>
+                <div className="flex justify-center items-center">
+                  <h1 className="text-xl font-medium">
+                    There is nothing here...
+                  </h1>
+                </div>
+              </>
+            )}
+            <div className="w-full flex justify-center">
+              <div
+                className="card card-compact w-3/4 bg-neutral hover:scale-sm text-white shadow-2xl cursor-pointer min-h-20 transition duration-300 ease-in-out"
+                id="addproduct"
+                onClick={addProductHandler}
+              >
+                <div className="card-body items-center justify-center">
+                  <FaPlus className="text-6xl" />
+                </div>
               </div>
-            </>
-          )}
-          <div
-            className="card card-compact w-full bg-neutral shadow-xl hover:scale-sm text-white shadow-2xl cursor-pointer min-h-20 transition duration-300 ease-in-out"
-            id="addproduct"
-            onClick={addProductHandler}
-          >
-            <div className="card-body items-center justify-center">
-              <FaPlus className="text-6xl" />
             </div>
           </div>
         </div>

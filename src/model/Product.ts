@@ -1,4 +1,4 @@
-import { DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection,  doc,  getDoc,  getDocs, orderBy, query } from "firebase/firestore";
+import { DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection,  deleteDoc,  doc,  getDoc,  getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../lib/config/firebase";
 
 export class Product{
@@ -49,3 +49,12 @@ export async function GetAllProductFromTenants(tenantId : string){
     return documents.docs.map(doc=>doc.data())
 }
 
+export async function DeleteProductFromTenants(product : Product, tenantId : string){
+    try{
+        await deleteDoc(doc(db, "tenants", tenantId, "products", product.id))
+    }catch(e){
+        return false;
+    }
+
+    return true
+}
