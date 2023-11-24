@@ -16,34 +16,20 @@ export default function Navbar() {
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
-            <li>
-              <details>
-                <summary >Menu</summary>
-                <ul className="p-2 bg-base-100">
-                  {role === USER_ROLE && (
-                    <>
-                      <li>
-                        <Link className="whitespace-nowrap" to={"/queue"}>My Queue</Link>
-                      </li>
-                    </>
-                  )}
-                  {role === TENANT_ROLE && (
-                    <>
-                      <li>
-                        <Link className="whitespace-nowrap" to={"/queue"}>All Queue</Link>
-                      </li>
-                      <li>
-                        <Link className="whitespace-nowrap" to={"/products"}>My Products</Link>
-                      </li>
-                    </>
-                  )}
-
-
-
-
-                </ul>
-              </details>
-            </li>
+            {role === USER_ROLE && (
+              <>
+                <li>
+                  <Link className="whitespace-nowrap" to={"/queue"}>My Queue</Link>
+                </li>
+              </>
+            )}
+            {role === TENANT_ROLE && (
+              <>
+                <li>
+                  <Link className="whitespace-nowrap" to={"/queue-tenant"}>All Queue</Link>
+                </li>
+              </>
+            )}
             <li
               onClick={async () => {
                 await auth.signOut();

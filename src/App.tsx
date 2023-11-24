@@ -57,7 +57,10 @@ function App() {
                 <Route path="/tenant/:id" element={<TenantDetailsPage />} />
                 <Route path="/queue" element={<QueuePage />} />
               </Route>
-              <Route element={<Tenant />}></Route>
+              <Route element={<Tenant />}>
+                <Route path="/products" element={<QueuePage />} />
+                <Route path="/queue-tenant" element={<QueuePage />} />
+              </Route>
             </Route>
             <Route element={<Guest />}>
               <Route path={"/login"} element={<LoginPage />} />
