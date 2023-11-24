@@ -25,12 +25,12 @@ export default function TenantHomePage() {
     return (
         <>
             <div className="p-10">
-                <div className="bg-stone-950 rounded-3xl p-8 flex flex-row items-center justify-between">
+                <div className="bg-primary rounded-3xl p-8 flex flex-row items-center justify-between">
                     <h1 className="text-2xl font-semibold text-white">
                         Start Addding Your Products
                     </h1>
                     <Link to={"/products"}>
-                        <div className="p-4 bg-stone-700 rounded-xl">
+                        <div className="p-4 rounded-xl">
                             <FaArrowRight className="text-white w-7 h-7" />
                         </div>
                     </Link>
@@ -45,13 +45,12 @@ export default function TenantHomePage() {
                         products.length > 0 &&
                         products.map((product) => {
                             return (
-                                <>
-                                    <ProductCard
-                                        product={product}
-                                        updateQuantity={() => { }}
-                                        viewOnly={true}
-                                    />
-                                </>
+                                <ProductCard
+                                    key={product.id}
+                                    product={product}
+                                    updateQuantity={() => { }}
+                                    viewOnly={true}
+                                />
                             );
                         })}
                     {products?.length == 0 && (

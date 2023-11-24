@@ -9,24 +9,24 @@ export default function Navbar() {
   const { user, role } = useAuth();
   return (
     <>
-      <div className="navbar bg-base-100 sticky">
+      <div className="navbar bg-base-100 sticky items-center justify-center">
         <div className="flex-1">
-          <Link to={"/"} className="btn btn-ghost text-xl">Home</Link>
-          <p className=" pl-5 text-xl">Welcome, {user?.email}</p>
+          <Link to={"/"} className="btn btn-ghost font-bold">Home</Link>
+          <p className=" pl-5 ">Welcome, {user?.email}</p>
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
             {role === USER_ROLE && (
               <>
                 <li>
-                  <Link className="whitespace-nowrap" to={"/queue"}>My Queue</Link>
+                  <Link to={"/queue"}>My Queue</Link>
                 </li>
               </>
             )}
             {role === TENANT_ROLE && (
               <>
                 <li>
-                  <Link className="whitespace-nowrap" to={"/queue-tenant"}>All Queue</Link>
+                  <Link to={"/queue-tenant"}>All Queue</Link>
                 </li>
               </>
             )}

@@ -36,7 +36,7 @@ export default function ({
     <>
       <div
         key={product.id}
-        className="card card-compact w-full bg-base-100 shadow-xl"
+        className="card card-compact w-full bg-neutral shadow-xl"
       >
         <figure>
           <img src={product.imageUrl ? product.imageUrl : defaultImage} />

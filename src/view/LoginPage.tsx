@@ -21,7 +21,7 @@ export default function LoginPage() {
   };
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+      <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-neutral">
         <form
           className="card-body"
           onSubmit={async (e) => await handleOnSubmit(e)}
@@ -50,11 +50,10 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
             />
             <label className="label">
+              <Link to="/register" className="label-text-alt link link-hover">Sign Up</Link>
               <a href="#" className="label-text-alt link link-hover">
                 Forgot password?
               </a>
-              <Link to="/register" className="label-text-alt link link-hover">Sign Up</Link>
-
             </label>
           </div>
           <div className="form-control mt-6">
