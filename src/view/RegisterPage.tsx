@@ -20,7 +20,7 @@ export default function RegisterPage() {
   return (
     <>
       <div className="flex justify-center items-center min-h-screen">
-        <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+        <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-neutral">
           <form
             className="card-body"
             onSubmit={async (e) => await handleOnSubmit(e)}
