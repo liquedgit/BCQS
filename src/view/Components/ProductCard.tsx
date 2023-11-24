@@ -70,7 +70,7 @@ export default function ({
 
             <div className="flex justify-end gap-2">
 
-              <button onClick={showDeleteModal} className="btn">
+              <button onClick={showDeleteModal} className="btn  bg-error text-white">
                 <FaTrash />
               </button>
               <button onClick={showEditModal} className="btn btn-primary">

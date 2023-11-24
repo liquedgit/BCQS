@@ -11,6 +11,7 @@ import HomePage from "./view/HomePage";
 import AuthenticatedOnly from "./lib/middleware/AuthenticatedOnly";
 import TenantDetailsPage from "./view/TenantDetailPage";
 import QueuePage from "./view/QueuePage";
+import TenantQueuePage from "./view/TenantQueuePage";
 
 function App() {
   const Guest = () => {
@@ -59,7 +60,7 @@ function App() {
               </Route>
               <Route element={<Tenant />}>
                 <Route path="/products" element={<QueuePage />} />
-                <Route path="/queue-tenant" element={<QueuePage />} />
+                <Route path="/queue-tenant" element={<TenantQueuePage />} />
               </Route>
             </Route>
             <Route element={<Guest />}>
