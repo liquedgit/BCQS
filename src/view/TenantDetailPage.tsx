@@ -70,7 +70,7 @@ export default function TenantDetailsPage() {
         <div className="flex">
           <h1 className="text-2xl font-semibold">Product List</h1>
           <div className="ml-auto flex items-center justify-between">
-            <h2 className="text-xl mr-6">Total Price : Rp. {totalPrice}</h2>
+            <h2 className="text-xl mr-6">Total Price : IDR {totalPrice}</h2>
             <button
               onClick={checkoutBtnOnClick}
               className="btn btn-error text-white"

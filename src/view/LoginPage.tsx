@@ -21,7 +21,11 @@ export default function LoginPage() {
   };
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-neutral">
+
+      <div className="card shrink-0 w-full max-w-sm shadow-2xl">
+
+        <h1 className="flex justify-center item-center pt-5 text-3xl font-bold">Login</h1>
+
         <form
           className="card-body"
           onSubmit={async (e) => await handleOnSubmit(e)}

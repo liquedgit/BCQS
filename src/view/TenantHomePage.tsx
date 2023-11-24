@@ -25,8 +25,8 @@ export default function TenantHomePage() {
 
   return (
     <>
-      <div className="p-10 -z-40">
-        <div className="bg-primary rounded-3xl p-8 flex flex-row items-center justify-between">
+      <div className="p-10">
+        <div className="bg-primary rounded-3xl p-5 flex flex-row items-center justify-between">
           <h1 className="text-2xl font-semibold text-white">
             Start Addding Your Products
           </h1>
