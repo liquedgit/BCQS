@@ -40,13 +40,13 @@ export default function TenantDetailsPage() {
     });
   };
 
+  const GetProducts = async () => {
+    if (id) {
+      const products = await GetAllProductFromTenants(id);
+      setProducts(products);
+    }
+  };
   useEffect(() => {
-    const GetProducts = async () => {
-      if (id) {
-        const products = await GetAllProductFromTenants(id);
-        setProducts(products);
-      }
-    };
     GetProducts();
   }, [id]);
 
@@ -88,6 +88,7 @@ export default function TenantDetailsPage() {
                   <ProductCard
                     product={product}
                     updateQuantity={updateQuantity}
+                    refetch={GetProducts}
                   />
                 </>
               );

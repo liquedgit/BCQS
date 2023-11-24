@@ -1,9 +1,14 @@
 import { FaEdit, FaMinus, FaPlus, FaTrash } from "react-icons/fa";
-import { DeleteProductFromTenants, Product } from "../../model/Product";
-import { useState, useEffect, useRef } from "react";
+import {
+  DeleteProductFromTenants,
+  Product,
+  UpdateProductFromTenants,
+} from "../../model/Product";
+import { useState, useEffect, useRef, ChangeEvent } from "react";
 import defaultImage from "../../assets/Tenant1.jpg";
 import { useAuth } from "../../hooks/AuthContext";
 import { toastError, toastSuccess } from "../../lib/config/toast";
+import { UploadImage } from "../../model/Upload";
 
 interface ComponentProps {
   product: Product;
@@ -39,16 +44,45 @@ export default function ({
   const updateModal = useRef<HTMLDialogElement | undefined>();
   const deleteModal = useRef<HTMLDialogElement | undefined>();
 
-  const handleOnDelete = async () => {};
+  const [newName, setNewName] = useState("");
+  const [newPrice, setNewPrice] = useState(0);
+  const [newImage, setNewImage] = useState<any>();
+
+  const handleOnUpdate = async () => {
+    console.log(newImage);
+
+    let URL = selectedProduct?.imageUrl;
+    if (newImage) {
+      URL = await UploadImage(newImage);
+    }
+    const res = await UpdateProductFromTenants(
+      new Product(selectedProduct!.id, newName, URL, newPrice),
+      user!.uid
+    );
+
+    if (res) {
+      toastSuccess("Successfully updated products");
+      refetch();
+    } else {
+      toastError("Error occured");
+    }
+  };
+
+  useEffect(() => {
+    if (selectedProduct) {
+      setNewName(selectedProduct.name);
+      setNewPrice(selectedProduct.price);
+    }
+  }, [selectedProduct]);
 
   return (
     <>
       <div key={product.id} className="w-full flex justify-center">
-        <div className="card card-compact w-3/4 bg-neutral shadow-xl hover:scale-sm transition duration-300 ease-in-out">
-          <figure>
+        <div className="card card-compact w-3/4 h-full bg-neutral shadow-xl hover:scale-sm transition duration-300 ease-in-out">
+          <figure className="w-full h-1/2">
             <img
               src={product.imageUrl ? product.imageUrl : defaultImage}
-              className="w-full"
+              className="w-full h-full object-cover"
             />
           </figure>
           <div className="card-body">
@@ -104,17 +138,19 @@ export default function ({
             <div className="flex items-center">
               <h2 className="w-20">Name :</h2>
               <input
+                onChange={(e) => setNewName(e.target.value)}
                 type="text"
                 className="input input-bordered"
-                value={selectedProduct?.name}
+                value={newName}
               />
             </div>
             <div className="flex items-center mt-5">
               <h2 className="w-20">Price :</h2>
               <input
+                onChange={(e) => setNewPrice(parseInt(e.target.value))}
                 type="number"
                 className="input input-bordered"
-                value={selectedProduct?.price}
+                value={newPrice}
               />
             </div>
             <div className="form-control w-full max-w-xs">
@@ -122,6 +158,9 @@ export default function ({
                 <span className="label-text">Product Image</span>
               </label>
               <input
+                onChange={(e: any) => {
+                  setNewImage(e.target.files[0]);
+                }}
                 type="file"
                 className="file-input file-input-bordered w-full max-w-xs"
               />
@@ -131,7 +170,12 @@ export default function ({
                 <button className="btn btn-neutral text-white">Close</button>
               </form>
               <form method="dialog">
-                <button className="btn btn-success text-white">Update</button>
+                <button
+                  onClick={async () => await handleOnUpdate()}
+                  className="btn btn-success text-white"
+                >
+                  Update
+                </button>
               </form>
             </div>
           </div>

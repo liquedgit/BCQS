@@ -1,4 +1,4 @@
-import { DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection,  deleteDoc,  doc,  getDoc,  getDocs, orderBy, query } from "firebase/firestore";
+import { DocumentData, QueryDocumentSnapshot, SnapshotOptions, addDoc, collection,  deleteDoc,  doc,  getDoc,  getDocs, orderBy, query, setDoc } from "firebase/firestore";
 import { db } from "../lib/config/firebase";
 
 export class Product{
@@ -56,5 +56,24 @@ export async function DeleteProductFromTenants(product : Product, tenantId : str
         return false;
     }
 
+    return true
+}
+
+export async function UpdateProductFromTenants(product : Product, tenantId : string){
+    try{
+        await setDoc(doc(db,"tenants", tenantId, "products", product.id).withConverter(ProductConverter), product)
+    }catch(e){
+        return false
+    }
+    return true
+}
+
+export async function AddProductFromTenants(product : Product, tenantId : string){
+    try{
+        await addDoc(collection(db, "tenants", tenantId, "products").withConverter(ProductConverter), product)
+    }catch(e){
+        console.error(e)
+        return false
+    }
     return true
 }
