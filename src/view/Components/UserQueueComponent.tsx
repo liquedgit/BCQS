@@ -1,6 +1,7 @@
 import { Queue } from "../../model/Queue";
 import { useEffect, useState } from "react";
 import { GetTenantById, Tenant } from "../../model/Tenant";
+import { STATUS_FINISHED, STATUS_PENDING } from "../../lib/config/constant";
 
 export default function UserQueueComponent({
   queue,
@@ -19,6 +20,8 @@ export default function UserQueueComponent({
       }
     };
 
+    console.log(queue);
+
     fetchTenantById();
   }, []);
 
@@ -28,12 +31,32 @@ export default function UserQueueComponent({
         <input type="radio" name="my-accordion-3" />
         <div className="collapse-title text-xl font-medium">
           <div className="flex">
-            <h2>{tenant?.name}</h2>
+            <h2 className="gap-10">{tenant?.name}
+              {queue.status == STATUS_FINISHED &&
+                <span
+                  className="badge badge-success ml-3"
+                >Finished</span>
+              }
+              {queue.status == STATUS_PENDING &&
+                <span
+                  className="badge badge-warning ml-3"
+                >Pending</span>
+              }
+
+            </h2>
+
+
+
             <p className="ml-auto">Queue #{i}</p>
           </div>
         </div>
         <div className="collapse-content">
-          <p>hello</p>
+          {queue.productQty.map((item) => {
+            return (
+              <div>
+                <p>{item.product.name} [{item.qty}x] </p>
+              </div>)
+          })}
         </div>
       </div>
     </>

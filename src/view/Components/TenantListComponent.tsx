@@ -35,6 +35,7 @@ export default function TenantListComponent() {
                               ? defaultImage
                               : tenant.imageUrl
                           }
+                          className="w-full"
                         />
                       </figure>
                       <div className="card-body flex justify-center items-center">
