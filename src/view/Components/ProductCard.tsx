@@ -9,8 +9,6 @@ interface ComponentProps {
   tenant?: boolean; // Add this line
 }
 
-
-
 export default function ({
   product,
   updateQuantity,
@@ -58,7 +56,7 @@ export default function ({
               <button onClick={minusOnClick} className="btn btn-error">
                 <FaMinus />
               </button>
-              <div className="flex justify-center items-center w-14 font-semibold text-xl text">
+              <div className="flex justify-center items-center w-14 font-semibold text-xl text-white">
                 {qty}
               </div>
               <button onClick={plusOnClick} className="btn btn-success">

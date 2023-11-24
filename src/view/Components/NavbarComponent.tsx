@@ -11,7 +11,7 @@ export default function Navbar() {
     <>
       <div className="navbar bg-base-100 sticky items-center justify-center">
         <div className="flex-1">
-          <Link to={"/"} className="btn btn-ghost font-bold">Home</Link>
+          <Link to={"/"} className="btn btn-ghost font-bold">BCQS</Link>
           <p className=" pl-5 ">Welcome, {user?.email}</p>
         </div>
         <div className="flex-none">
