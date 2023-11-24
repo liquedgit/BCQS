@@ -25,9 +25,7 @@ export default function QueuePage() {
             queue.length > 0 &&
             queue.map((q, i) => {
               return (
-                <>
-                  <UserQueueComponent queue={q} i={i + 1} />
-                </>
+                <UserQueueComponent key={q.id} queue={q} i={i + 1} />
               );
             })}
         </div>

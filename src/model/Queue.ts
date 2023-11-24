@@ -50,20 +50,19 @@ const ProductQtyConverter = {
 const QueueConverter ={
     toFirestore : (queue : Queue)=>{
         const product = queue.productQty.map((product)=>ProductQtyConverter.toFirestore(product))
-        console.log(product)
         
         return{
             userid: queue.userid,
             createdAt : queue.createdAt,
             tenantId : queue.tenantId,
-            order : product
+            order : product,
+            status : queue.status
         }
     },
     fromFirestore: (snapshot: QueryDocumentSnapshot, options : SnapshotOptions) : Queue=>{
 
         const data = snapshot.data(options);
         const createdAtDate = data.createdAt.toDate();
-        console.log(data)
         const productQtyArray = data.order.map((orderData : any) => {
             const product = new Product(orderData.productId, orderData.name, orderData.imageUrl, orderData.price);
             return new ProductQty(product, orderData.qty);
