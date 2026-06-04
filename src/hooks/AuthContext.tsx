@@ -1,27 +1,22 @@
-import { User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../lib/config/firebase";
 import { useLoading } from "./LoadingContext";
-import { GetUserRole } from "../model/Auth";
+import { GetUserRole, LocalUser, onAuthStateChanged } from "../model/Auth";
 
 export interface UserContextInterface {
-  user: User | null;
-  role: String;
+  user: LocalUser | null;
+  role: string;
 }
 
-const userContext = createContext<UserContextInterface>({
-  user: null,
-  role: "",
-});
+const userContext = createContext<UserContextInterface>({ user: null, role: "" });
 
 export default function AuthProvider({ children }: { children: any }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<LocalUser | null>(null);
   const [role, setRole] = useState("");
   const { loading, setLoading } = useLoading();
 
   useEffect(() => {
     setLoading(true);
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+    const unsubscribe = onAuthStateChanged((currentUser) => {
       setUser(currentUser);
       setLoading(false);
     });
@@ -29,30 +24,15 @@ export default function AuthProvider({ children }: { children: any }) {
   }, []);
 
   useEffect(() => {
-    if (user) {
-      setLoading(true);
-      const fetchUserRole = async () => {
-        try {
-          const userRole = await GetUserRole(user.uid);
-          setRole(userRole.role);
-          setLoading(false);
-        } catch (error) {
-          console.error("Error fetching user role:", error);
-        }
-      };
-      fetchUserRole();
-    }
+    if (!user) { setRole(""); return; }
+    GetUserRole(user.uid).then(({ role }) => setRole(role));
   }, [user]);
-
-  useEffect(() => {}, [loading]);
 
   if (loading) {
     return (
-      <>
-        <div className="min-h-screen flex justify-center items-center">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
-      </>
+      <div className="min-h-screen flex justify-center items-center">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
     );
   }
 

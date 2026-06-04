@@ -1,51 +1,60 @@
-import { collection, doc, getDoc, setDoc } from "firebase/firestore"
-import { auth, db } from "../lib/config/firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { localDB } from "../lib/store/db";
 import { USER_ROLE } from "../lib/config/constant";
 
-const userCollection = collection(db, "users");
-
-export interface UserDBO{
-    role : string
+export interface UserDBO {
+  role: string;
 }
 
-export const GetUserRole = async(uid : string)=>{
-    const userData = await getDoc(doc(userCollection, uid))
-    const data : UserDBO = {
-        role: userData.data()?.role
-    };
-    return data    
+export interface LocalUser {
+  uid: string;
+  email: string;
 }
 
-export async function AuthLogin(email : string, password : string){
-    try{
-        const user = await signInWithEmailAndPassword(auth, email,password)
-        return user;
-        
-    }catch(e){
-        return null;
-    }
+let currentUser: LocalUser | null = null;
+const listeners: ((user: LocalUser | null) => void)[] = [];
 
+function notify() {
+  listeners.forEach((cb) => cb(currentUser));
 }
 
-export async function AuthRegister(email : string, password : string){
-    try{
-        const newUser = await createUserWithEmailAndPassword(auth, email,password);
-            
-        await setDoc(doc(userCollection, newUser.user.uid), {
-            role: USER_ROLE  
-        });
-        await signOut(auth)
-        return newUser
-    }catch(e){        
-        return null;
-    }
+try {
+  const stored = localStorage.getItem("auth_user");
+  if (stored) currentUser = JSON.parse(stored);
+} catch {}
+
+export function onAuthStateChanged(callback: (user: LocalUser | null) => void): () => void {
+  listeners.push(callback);
+  callback(currentUser);
+  return () => {
+    const idx = listeners.indexOf(callback);
+    if (idx > -1) listeners.splice(idx, 1);
+  };
 }
 
-export async function AuthSignOut(){
-    try{
-        await auth.signOut();
-    }catch(e){
-        console.error(e)
-    }
+export async function GetUserRole(uid: string): Promise<UserDBO> {
+  const user = localDB.users.find((u) => u.uid === uid);
+  return { role: user?.role ?? "" };
+}
+
+export async function AuthLogin(email: string, password: string): Promise<LocalUser | null> {
+  const user = localDB.users.find((u) => u.email === email && u.password === password);
+  if (!user) return null;
+  currentUser = { uid: user.uid, email: user.email };
+  localStorage.setItem("auth_user", JSON.stringify(currentUser));
+  notify();
+  return currentUser;
+}
+
+export async function AuthRegister(email: string, password: string): Promise<LocalUser | null> {
+  if (localDB.users.find((u) => u.email === email)) return null;
+  const newUser = { uid: localDB.generateId(), email, password, role: USER_ROLE };
+  localDB.users.push(newUser);
+  localDB.saveUsers();
+  return { uid: newUser.uid, email: newUser.email };
+}
+
+export async function AuthSignOut(): Promise<void> {
+  currentUser = null;
+  localStorage.removeItem("auth_user");
+  notify();
 }

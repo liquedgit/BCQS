@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../lib/config/firebase";
+import { AuthSignOut } from "../../model/Auth";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/AuthContext";
 import { TENANT_ROLE, USER_ROLE } from "../../lib/config/constant";
@@ -32,7 +32,7 @@ export default function Navbar() {
             )}
             <li
               onClick={async () => {
-                await auth.signOut();
+                await AuthSignOut();
                 nav("/login");
               }}
             >

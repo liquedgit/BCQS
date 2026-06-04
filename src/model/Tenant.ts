@@ -1,39 +1,25 @@
-import { DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore";
-import { db } from "../lib/config/firebase";
+import { localDB } from "../lib/store/db";
 
-export class Tenant{
-    name : string;
-    imageUrl : string | undefined;
-    id : string;
-    constructor(id : string, name : string, imageUrl : string | undefined){
-        this.id = id;
-        this.name = name;
-        this.imageUrl = imageUrl;
-    }
-    
+export class Tenant {
+  id: string;
+  name: string;
+  imageUrl: string | undefined;
 
-}
-const TenantConverter = {
-    toFirestore: (tenant : Tenant) : DocumentData => {
-        return {
-            name: tenant.name,
-            imageUrl: tenant.imageUrl
-        };
-    },
-    fromFirestore: (snapshot : QueryDocumentSnapshot, options : SnapshotOptions) : Tenant => {
-        const data = snapshot.data(options);
-        return new Tenant(snapshot.id, data.name, data.imageUrl);
-    }
+  constructor(id: string, name: string, imageUrl: string | undefined) {
+    this.id = id;
+    this.name = name;
+    this.imageUrl = imageUrl;
+  }
 }
 
-export async function GetAllTenants(){
-    const q = query(collection(db, "tenants"), orderBy("name"))
-    const documents = await getDocs(q.withConverter(TenantConverter))
-    return documents.docs.map(doc=>doc.data())
+export async function GetAllTenants(): Promise<Tenant[]> {
+  return localDB.tenants
+    .map((t) => new Tenant(t.id, t.name, t.imageUrl))
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-export async function GetTenantById(tenantId : string){
-    const document =  await getDoc(doc(db, "tenants", tenantId).withConverter(TenantConverter))
-
-    return document.data()
+export async function GetTenantById(tenantId: string): Promise<Tenant | undefined> {
+  const t = localDB.tenants.find((t) => t.id === tenantId);
+  if (!t) return undefined;
+  return new Tenant(t.id, t.name, t.imageUrl);
 }
